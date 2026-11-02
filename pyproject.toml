@@ -21,8 +21,8 @@ classifiers = [
 dependencies = [
     "musicbrainzngs",
     "mutagen",
+    "packaging",
     "pycdio",
-    "PyGObject",
     "ruamel.yaml",
     "setuptools_scm",
     "discid",
