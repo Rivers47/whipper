@@ -1,4 +1,4 @@
-FROM debian:testing
+FROM debian:trixie
 ARG optical_gid
 ARG uid=1000
 
@@ -9,17 +9,11 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     eject \
     flac \
     git \
-    libcdio-dev \
-    libcdio-paranoia-dev \
-    libdiscid-dev \
-    libiso9660-dev \
+    libdiscid0 \
     libsndfile1-dev \
     locales \
-    make \
-    pkgconf \
-    python3-cdio \
     python3-dev \
-    python3-discid \
+    python3-cdio \
     python3-musicbrainzngs \
     python3-mutagen \
     python3-packaging \
@@ -44,10 +38,12 @@ RUN echo "LC_ALL=en_US.UTF-8" >> /etc/environment \
     && echo "LANG=en_US.UTF-8" > /etc/locale.conf \
     && locale-gen en_US.UTF-8
 
-# install whipper
+# install whipper; discid isn't packaged in trixie but the pypi module is
+# pure python, so only the libdiscid0 runtime library is needed above
 RUN mkdir /whipper
 COPY . /whipper/
-RUN cd /whipper && pip install --no-cache-dir --no-deps --break-system-packages . \
+RUN pip install --no-cache-dir --break-system-packages discid \
+    && cd /whipper && pip install --no-cache-dir --no-deps --break-system-packages . \
     && rm -rf /whipper \
     && whipper -v
 
